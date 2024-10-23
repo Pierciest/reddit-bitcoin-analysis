@@ -1,1 +1,1 @@
-# reddit-bitcoin-analysis
+# reddit bitcoin analysis

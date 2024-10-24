@@ -8,7 +8,7 @@ def create_monthly_date_ranges(start_date, end_date):
     date_ranges = pd.date_range(start=start_date, end=end_date, freq='M').tolist()
     return [(str(date_range.replace(day=1).date()), str(date_range.date())) for date_range in date_ranges]
 
-def fetch_monthly_trends(keyword, start_date, end_date, geo='US', sleep_time=(10, 20)):
+def fetch_monthly_trends(keyword, start_date, end_date, geo='US', sleep_time=(0, 5)):
     """Fetches Google Trends data using pytrends with a sliding window by month."""
     pytrends = TrendReq(hl='en-US', tz=360)  # Initialize pytrends request object
     date_ranges = create_monthly_date_ranges(start_date, end_date)
@@ -49,7 +49,7 @@ def fetch_overall_trends(keyword, start_date, end_date, geo='US', sleep_time=(10
     return all_data
 
 def transform_actual_volume(daily_trends, monthly_trends):
-    """Adjusts daily trends based on the corresponding monthly trend values."""
+    """Adjusts daily trends by multiplying each day with the corresponding monthly trend value."""
     
     # Ensure 'date' column is in datetime format
     daily_trends['date'] = pd.to_datetime(daily_trends['date'])
@@ -59,13 +59,15 @@ def transform_actual_volume(daily_trends, monthly_trends):
     daily_trends['month'] = daily_trends['date'].dt.to_period('M')
     monthly_trends['month'] = monthly_trends['date'].dt.to_period('M')
     
-    # Merge daily and monthly data based on the 'month' column
-    merged_data = pd.merge(daily_trends, monthly_trends[['month', 'bitcoin']], on='month', how='left', suffixes=('_daily', '_monthly'))
+    # Convert monthly trends into a dictionary for easy lookup
+    monthly_dict = monthly_trends.set_index('month')['bitcoin'].to_dict()
     
-    # Adjust daily trend values by multiplying them with the corresponding monthly trend value
-    merged_data['adjusted_value'] = merged_data['bitcoin_daily'] * merged_data['bitcoin_monthly']
+    # Multiply each daily trend value by the corresponding monthly value
+    daily_trends['adjusted_value'] = daily_trends['bitcoin'].apply(
+        lambda x: x * monthly_dict[daily_trends.loc[daily_trends.index[daily_trends['bitcoin'] == x], 'month'].values[0]]
+    )
     
-    return merged_data[['date', 'adjusted_value']]
+    return daily_trends[['date', 'adjusted_value']]
 
 def save_to_csv(df, filename):
     """Saves the DataFrame to a CSV file."""

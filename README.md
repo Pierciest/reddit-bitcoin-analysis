@@ -2,8 +2,9 @@
 
 This repository focuses on analyzing the correlation between the volatility in decentralized economies and social media platforms, specifically using **Bitcoin** and **Reddit** as sample data. The primary goal is to employ **Deep Learning** techniques to identify correlations between sub-trends on Reddit and Bitcoin's market volatility.
 
-Currently the progress is in the data gathering part, stay tuned for the updates.
+Currently, the progress is in the **data gathering** phase. Stay tuned for updates.
 
+---
 
 ## Data
 
@@ -11,44 +12,60 @@ Currently the progress is in the data gathering part, stay tuned for the updates
 
 #### Google Trends Fetcher
 
-This module contains a script for processing Google Trends data to evaluate the correlation between Reddit post volumes and Google search trends.
+This module contains a script designed to process Google Trends data and analyze the correlation between Reddit post volumes and Google search trends.
 
 ##### Overview
 
-Google Trends does not provide an official API for retrieving search data, and the numbers represent relative searches rather than actual search volumes. This script converts relative volumes into global estimates. Since daily volume data cannot be fetched for long time spans, two datasets are required:
+Google Trends does not offer an official API for direct data retrieval. Instead, search volumes are relative measures of interest over time. This script converts those relative search volumes into global estimates. Since Google Trends does not provide daily volume data for extended time periods, two datasets are used:
 
-- **Monthly Volume**: A dataset containing the search volumes by **month**.
-- **Daily Volume**: A dataset containing the search volumes by **day** for each month.
+- **Monthly Volume**: Dataset with search volumes by **month**.
+- **Daily Volume**: Dataset with search volumes by **day** for each month.
 
 ##### Key Features
 
-- Retrieves **Monthly Volume** data.
-- Retrieves **Daily Volume** data.
-- Maps the relative monthly volume across each month to individual days and scales the volumes accordingly.
-- Outputs a CSV file with the search volume for each day.
+- Retrieves **Monthly Volume** data from Google Trends.
+- Retrieves **Daily Volume** data from Google Trends.
+- Maps relative monthly search volumes to individual days within each month, scaling the volumes appropriately.
+- Outputs the daily search volumes as a CSV file.
 
 #### Reddit Post-Comment Analyzer
 
-This module contains a **PySpark** script optimized for processing Reddit post and comment data at scale. It is part of the larger project to analyze significant volumes of Reddit data efficiently.
+This module contains a **PySpark** script optimized for processing Reddit posts and comments at scale. It is an essential part of the overall project, designed to handle large volumes of Reddit data efficiently.
 
 ##### Overview
 
-The script links **comments** to their respective **posts**, ensuring that comments are made within 24 hours of the post's creation time. It processes two main datasets:
+The script links **comments** to their respective **posts**, ensuring comments are made within 24 hours of the original post. It processes two datasets:
 
-- **Reddit Posts**: CSV file containing posts from a subreddit.
-- **Reddit Comments**: CSV file containing comments from the same subreddit.
+- **Reddit Posts**: A CSV file containing posts made in a specific subreddit.
+- **Reddit Comments**: A CSV file containing comments made in the same subreddit.
 
 ##### Key Features
 
-- Utilizes **PySpark** to process large datasets efficiently.
+- Leverages **PySpark** to efficiently process large datasets.
 - Joins Reddit **posts** and **comments** based on post `id` and comment timestamps.
-- Filters comments made within 24 hours of the post creation.
-- Outputs a CSV file containing the matched posts and their associated comments.
+- Filters comments that were made within 24 hours of a post's creation.
+- Outputs a CSV file containing matched posts and their associated comments.
 
+---
 
-### Data pre-processing
+### Data Pre-processing
 
-### Data Clustering
+_Coming soon..._
 
+---
 
+### Data Clustering and Tagging
 
+_Coming soon..._
+
+---
+
+## Deep/Machine Learning
+
+_Coming soon..._
+
+---
+
+## Analysis and Results
+
+_Coming soon..._
